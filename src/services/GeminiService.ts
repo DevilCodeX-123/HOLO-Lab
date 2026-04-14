@@ -1,10 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
-const genAI = new GoogleGenerativeAI(API_KEY);
+const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
 
 export const explainEvent = async (eventDescription: string) => {
   try {
+    if (!genAI) return "API Key missing! Add it in Render settings.";
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     
     const prompt = `You are a friendly, enthusiastic science mentor for children in a HoloLab AR system. 
@@ -22,6 +23,7 @@ export const explainEvent = async (eventDescription: string) => {
 
 export const getSmartSuggestion = async (currentObjects: string[]) => {
   try {
+    if (!genAI) return "Want to try adding an Asteroid? ☄️";
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const prompt = `Based on these objects currently in the scene: ${currentObjects.join(", ")}, 
     suggest one interesting science experiment or object to add next. 

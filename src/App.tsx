@@ -124,17 +124,17 @@ const App: React.FC = () => {
       </div>
 
       {/* UI Interaction Layer */}
-      <div className="absolute inset-0 p-4 md:p-8 flex flex-col md:grid md:grid-cols-[320px_1fr_140px] md:grid-rows-[1fr_auto] pointer-events-none z-10 gap-4 overflow-hidden">
-        <div className="w-full md:w-auto overflow-hidden rounded-2xl md:rounded-none bg-black/40 md:bg-transparent max-h-[40vh] md:max-h-full md:h-full md:row-span-2 pointer-events-auto">
+      <div className="ui-overlay">
+        <div className="sidebar-container">
           <Sidebar />
         </div>
-        <div className="flex items-start justify-center mt-2 md:mt-0 pt-0 md:pt-8 w-full md:col-start-2 pointer-events-auto">
+        <div className="overlay-container">
           <Overlay />
         </div>
-        <div className="absolute right-4 top-4 md:relative md:right-auto md:top-auto flex items-center justify-center md:col-start-3 pointer-events-auto scale-75 md:scale-100">
+        <div className="dustbin-container">
           <Dustbin />
         </div>
-        <div className="md:col-start-2 md:col-span-2 self-end mt-auto md:mt-0 pb-2 md:pb-8 pointer-events-auto w-full scale-90 origin-bottom md:scale-100">
+        <div className="bottom-panel-container">
           <BottomPanel />
         </div>
       </div>
