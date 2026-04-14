@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Environment } from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
 import SceneContainer from './components/Scene/SceneContainer.tsx';
 import Sidebar from './components/UI/Sidebar.tsx';
@@ -11,6 +10,23 @@ import HandHUD from './components/UI/HandHUD.tsx';
 import { useVoiceControl } from './hooks/useVoiceControl';
 import { useSimulationManagers } from './hooks/useSimulationManagers';
 import { useHandTracking } from './hooks/useHandTracking.ts';
+
+class SceneErrorBoundary extends React.Component<{children: React.ReactNode}, {crashed: boolean}> {
+  state = { crashed: false };
+  static getDerivedStateFromError() { return { crashed: true }; }
+  componentDidCatch(e: Error) { console.error('3D Scene crash:', e); }
+  render() {
+    if (this.state.crashed) {
+      return (
+        <mesh>
+          <boxGeometry />
+          <meshStandardMaterial color="red" />
+        </mesh>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const App: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -108,18 +124,24 @@ const App: React.FC = () => {
         <Canvas
           shadows
           camera={{ position: [0, 0, 5], fov: 50 }}
-          gl={{ alpha: true, antialias: true }}
+          gl={{ alpha: true, antialias: true, powerPreference: 'low-power' }}
+          onCreated={({ gl }) => {
+            gl.domElement.addEventListener('webglcontextlost', (e) => {
+              e.preventDefault();
+              console.warn('WebGL context lost — will restore');
+            });
+          }}
         >
           <color attach="background" args={['transparent']} />
           <ambientLight intensity={0.4} />
           <spotLight position={[10, 15, 10]} angle={0.3} penumbra={1} intensity={2} castShadow />
           <pointLight position={[-10, 10, -10]} intensity={1} color="#60a5fa" />
-          
-          <Physics gravity={[0, -9.81, 0]}>
-            <SceneContainer resultsRef={resultsRef} />
-          </Physics>
 
-          <Environment preset="sunset" />
+          <Physics gravity={[0, -9.81, 0]}>
+            <SceneErrorBoundary>
+              <SceneContainer resultsRef={resultsRef} />
+            </SceneErrorBoundary>
+          </Physics>
         </Canvas>
       </div>
 

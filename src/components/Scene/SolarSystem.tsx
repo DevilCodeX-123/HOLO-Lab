@@ -1,21 +1,20 @@
 import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
+// Use pure colors instead of texture URLs — avoids network crashes that black-screen the site
 const PLANET_DATA = [
-  { name: 'mercury', dist: 2.0, size: 0.15, speed: 0.04, texture: 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/mercury.jpg' },
-  { name: 'venus', dist: 3.2, size: 0.25, speed: 0.015, texture: 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/venus_surface.jpg' },
-  { name: 'earth', dist: 4.5, size: 0.3, speed: 0.01, texture: 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg' },
-  { name: 'mars', dist: 6.0, size: 0.22, speed: 0.008, texture: 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/mars_1k.jpg' },
-  { name: 'jupiter', dist: 8.5, size: 0.6, speed: 0.002, texture: 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/jupiter_1k.jpg' },
-  { name: 'saturn', dist: 11.0, size: 0.5, speed: 0.0009, texture: 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/saturn.png' },
+  { name: 'mercury', dist: 2.0, size: 0.15, speed: 0.04, color: '#b5b5b5' },
+  { name: 'venus',   dist: 3.2, size: 0.25, speed: 0.015, color: '#e8cda0' },
+  { name: 'earth',   dist: 4.5, size: 0.3,  speed: 0.01,  color: '#3a7bd5' },
+  { name: 'mars',    dist: 6.0, size: 0.22, speed: 0.008,  color: '#c1440e' },
+  { name: 'jupiter', dist: 8.5, size: 0.6,  speed: 0.002,  color: '#c88b3a' },
+  { name: 'saturn',  dist: 11.0, size: 0.5, speed: 0.0009, color: '#e4d191' },
 ];
 
-const OrbitPlanet: React.FC<{ data: any }> = ({ data }) => {
+const OrbitPlanet: React.FC<{ data: typeof PLANET_DATA[0] }> = ({ data }) => {
   const orbitRef = useRef<THREE.Group>(null);
   const planetRef = useRef<THREE.Mesh>(null);
-  const texture = useTexture(data.texture) as any;
 
   useFrame((_state, delta) => {
     if (orbitRef.current) orbitRef.current.rotation.y += data.speed * delta * 50;
@@ -26,7 +25,7 @@ const OrbitPlanet: React.FC<{ data: any }> = ({ data }) => {
     <group ref={orbitRef}>
       <mesh ref={planetRef} position={[data.dist, 0, 0]} castShadow receiveShadow>
         <sphereGeometry args={[data.size, 32, 32]} />
-        <meshStandardMaterial map={texture} roughness={0.7} metalness={0.2} />
+        <meshStandardMaterial color={data.color} roughness={0.7} metalness={0.2} />
       </mesh>
       {/* Visual Orbit Line */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
@@ -38,18 +37,15 @@ const OrbitPlanet: React.FC<{ data: any }> = ({ data }) => {
 };
 
 const SolarSystem: React.FC = () => {
-  const sunTexture = useTexture('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/sun.jpg');
-
   return (
     <group scale={[0.5, 0.5, 0.5]}>
       {/* The Sun */}
       <mesh>
         <sphereGeometry args={[1.5, 64, 64]} />
-        <meshStandardMaterial 
-          emissiveMap={sunTexture} 
-          emissive="#ffa500" 
-          emissiveIntensity={10} 
-          map={sunTexture} 
+        <meshStandardMaterial
+          emissive="#ffa500"
+          emissiveIntensity={3}
+          color="#ffde66"
         />
         <pointLight intensity={10} distance={100} color="#ffde66" castShadow />
       </mesh>
