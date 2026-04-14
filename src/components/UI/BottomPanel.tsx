@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppStore } from '../../store/useAppStore';
-import { Power, RotateCcw, Hand, Eye, Settings2, Wind } from 'lucide-react';
+import { RotateCcw, Hand, Eye, Settings2, Wind } from 'lucide-react';
 
 const BottomPanel: React.FC = () => {
   const { gravity, setGravity, handMode, setHandMode, undo } = useAppStore();

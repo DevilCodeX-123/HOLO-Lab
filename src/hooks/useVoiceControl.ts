@@ -4,7 +4,7 @@ import { useAppStore } from '../store/useAppStore';
 export const useVoiceControl = () => {
   const addObject = useAppStore(state => state.addObject);
   const setAiMessage = useAppStore(state => state.setAiMessage);
-  const setIsRecording = useAppStore(state => state.isRecording);
+  const setIsRecording = useAppStore(state => state.setIsRecording);
   
   const recognitionRef = useRef<any>(null);
 
@@ -29,10 +29,10 @@ export const useVoiceControl = () => {
       console.log("Voice Command:", transcript);
 
       if (transcript.includes('add earth')) {
-        addObject({ id: Math.random().toString(), type: 'planet', planetType: 'earth', position: [0, 2, 0] });
+        addObject({ id: Math.random().toString(), type: 'planet', planetType: 'earth', position: [0, 2, 0], isKinematic: true });
         setAiMessage("Adding Earth to your scene! 🌍");
       } else if (transcript.includes('add moon')) {
-        addObject({ id: Math.random().toString(), type: 'planet', planetType: 'moon', position: [1, 1, 0] });
+        addObject({ id: Math.random().toString(), type: 'planet', planetType: 'moon', position: [1, 1, 0], isKinematic: true });
         setAiMessage("Behold the Moon! 🌙");
       } else if (transcript.includes('delete object') || transcript.includes('remove')) {
         setAiMessage("Which object should I remove? Try dragging it to the bin.");

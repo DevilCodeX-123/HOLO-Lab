@@ -41,6 +41,7 @@ interface HoloState {
   setSceneScale: (scale: number) => void;
   setHandMode: (mode: 'skeleton' | 'ghost') => void;
   setAiMessage: (msg: string) => void;
+  setIsRecording: (isRec: boolean) => void;
   undo: () => void;
 }
 
@@ -72,6 +73,7 @@ export const useAppStore = create<HoloState>((set) => ({
   setSceneScale: (scale) => set({ sceneScale: scale }),
   setHandMode: (mode) => set({ handMode: mode }),
   setAiMessage: (msg) => set({ aiMessage: msg }),
+  setIsRecording: (isRec) => set({ isRecording: isRec }),
 
   undo: () => set((state) => {
     if (state.history.length === 0) return state;

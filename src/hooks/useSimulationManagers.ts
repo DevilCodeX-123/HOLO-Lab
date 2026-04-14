@@ -25,7 +25,8 @@ export const useSimulationManagers = () => {
           id: Math.random().toString(), 
           type: 'molecule', 
           element: 'H2O', 
-          position: oAtoms[0].position 
+          position: oAtoms[0].position,
+          isKinematic: true
         });
 
         const explanation = await explainEvent("Chemistry Success: Two Hydrogen atoms and one Oxygen atom fused to create a Water molecule!");

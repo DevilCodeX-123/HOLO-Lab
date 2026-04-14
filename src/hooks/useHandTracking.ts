@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 import type { HandLandmarkerResult } from '@mediapipe/tasks-vision';
 
-export const useHandTracking = (sourceRef: React.RefObject<HTMLVideoElement | HTMLCanvasElement>) => {
+export const useHandTracking = (sourceRef: React.RefObject<HTMLVideoElement | HTMLCanvasElement | null>) => {
   const landmarkerRef = useRef<HandLandmarker | null>(null);
   const resultsRef = useRef<HandLandmarkerResult | null>(null);
   const requestRef = useRef<number | undefined>(undefined);
